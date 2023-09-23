@@ -15,37 +15,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completionfunction tssh() { tsh ssh -A ${USER//./}@$1 }
 
-function tlogin() {
-
-  cluster=$1
-  if [ -z "$cluster" ]; then
-    echo "Cluster not set"
-    echo "Run: tlogin {{ CLUSTER }}, where {{ CLUSTER }} can be prod, stage or dev"
-    return 0
-  fi
-
-  if [[ $cluster == "prod" ]]; then
-    cluster="keyhole"
-  fi
-  echo "Connecting to teleport.core.affirm-${cluster}.com"
-  out=$(tsh login --proxy=teleport.core.affirm-${cluster}.com:443)
-  echo "${out}"
-}
-export PATH=/usr/local/opt/openssl@1.0.2t/bin:$PATH
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-export PATH=/usr/local/opt/gnu-getopt/bin:$PATH
-export PATH=/usr/local/opt/mysql@5.7/bin:$PATH
-
-function tssh() { 
-  tsh ssh -A ${USER//./}@$1
-}
-
 # Set name of the theme to load --- if set to "random", it will
 # load a random t:qeme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -136,33 +110,9 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPTS="—height=40% —preview=“cat {}” —preview-window=right:60%:wrap"
-function activate_venv() {
-    # Specify deployable target
-    local target=${1-monolith}
-    echo Activating virtual environment for $target
-
-    local WORKSPACE=/Users/dan.rich/workshop
-    cd $WORKSPACE/all-the-things
-    source $WORKSPACE/all-the-things/deployable/$target/src/.venv/bin/activate
-}
-
-function activate_venv3() {
-    # Specify deployable target
-    local target=${1-monolith}
-    echo Activating virtual environment for $target
-
-    local WORKSPACE=/Users/dan.rich/workshop
-    cd $WORKSPACE/all-the-things
-    source $WORKSPACE/all-the-things/deployable/$target/src/.venv3/bin/activate
-}
-
-alias scc="/Users/dan.rich/workshop/cosmops/kubernetes/scripts/set-cluster-context.py"
-
-export JAVA_HOME=`/usr/libexec/java_home -v 11.0.7`
